@@ -1,0 +1,146 @@
+.vc_custom_flexx_icon {
+    background-image: url('../images/vc-icon.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.vc_add-element-container .wpb-content-layouts {
+    grid-template-columns: repeat(auto-fill, 300px);
+}
+
+.vc_add-element-container .wpb-content-layouts a {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    align-items: flex-start;
+    text-align: left;
+    column-gap: 20px;
+}
+
+.vc_add-element-container .wpb-content-layouts a .vc_element-icon {
+    grid-row: 1 / span 2;
+}
+
+.vc_add-element-container .wpb-content-layouts a .vc_element-description {
+    text-align: left;
+    margin-top: 0;
+}
+
+.dual-listbox {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto;
+    align-items: center;
+}
+
+.dual-listbox select {
+    flex: auto;
+}
+
+.dual-listbox-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-inline: 10px;
+}
+
+.vc_controls-row {
+    justify-content: flex-start;
+}
+
+.vc_controls-row .vc_row_edit_clone_delete {
+    margin-left: auto;
+}
+
+.flexx-table-param {
+    margin-top: 10px;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.flexx-table-toolbar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.flexx-table-toolbar button {
+    background: #2271b1;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.flexx-table-toolbar button:hover {
+    background: #135e96;
+}
+
+.flexx-table-editor {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.flexx-table-editor th,
+.flexx-table-editor td {
+    border: 1px solid #ccd0d4;
+    padding: 6px;
+    vertical-align: middle;
+    background: white;
+}
+
+.flexx-table-editor th {
+    position: relative;
+    background: #f6f7f7;
+}
+
+.flexx-table-editor th input {
+    font-weight: 600;
+}
+
+.flexx-table-heading {
+    width: 100%;
+    border: none;
+    padding: 6px 8px;
+    font-weight: normal;
+    background: transparent;
+    box-sizing: border-box;
+}
+
+.flexx-table-cell {
+    width: 100%;
+    border: none;
+    padding: 6px 8px;
+    background: transparent;
+    box-sizing: border-box;
+}
+
+.flexx-table-editor .remove-row,
+.flexx-table-editor .remove-column {
+    background: none;
+    color: #b32d2e;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    float: right;
+    padding: 4px 6px;
+    margin: 2px;
+    border-radius: 3px;
+}
+
+.flexx-table-editor .remove-column {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    translate: 0 -50%;
+    margin: 0;
+}
+
+.flexx-table-editor .remove-row:hover,
+.flexx-table-editor .remove-column:hover {
+    color: #000;
+}

@@ -1,0 +1,63 @@
+h1, .like-h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+h2, .like-h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+h3, .like-h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+h4, .like-h4 {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+p {
+  margin: 0 0 15px 0;
+}
+
+p [class*="like-"] {
+  margin-bottom: -10px;
+  display: block;
+}
+
+.flexx-intro-text {
+  font-size: 125%;
+}
+
+.display-1 {
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.display-2 {
+  font-size: 2.3em;
+  font-weight: bold;
+}
+
+.display-2 {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.display-3 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.color-text-gold {
+  color: #f0c14b;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
