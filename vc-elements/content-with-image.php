@@ -52,8 +52,9 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Image_With_Content' ) ) {
                 "content_element"         => true,
                 "show_settings_on_create" => true,
                 "icon"                    => FLEXX_CP_IMG_URL . 'vc-icon.svg',
-                "category"                => "Flexx",
+                "category"                => "Flexxmarketing",
                 'admin_enqueue_js'        => FLEXX_CP_ASSETS_URL . '/js/vc-element-view.js',
+                'admin_enqueue_css'       => FLEXX_CP_ASSETS_URL . '/css/vc-element-view.css',
                 'js_view'                 => 'VcCustomElementView',
                 "params"                  => array(
 
@@ -64,10 +65,20 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Image_With_Content' ) ) {
                         "description" => "Kies een van de opties.",
                         "group"       => "Algemeen",
                         "value"       => array(
-                            "Afbeelding links, tekst rechts" => "",
-                            "Afbeelding rechts, tekst links" => "reverse",
+                            "Afbeelding(en) links, tekst rechts" => "",
+                            "Afbeelding(en) rechts, tekst links" => "reverse",
                         ),
                         "save_always" => true,
+                        "admin_label" => true,
+                    ),
+
+                    array(
+                        "type"        => "textfield",
+                        "heading"     => "Titel",
+                        "param_name"  => "title",
+                        "description" => "Vul hier de titel in.",
+                        "group"       => "Algemeen",
+                        "admin_label" => true,
                     ),
 
                     array(
@@ -80,27 +91,21 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Image_With_Content' ) ) {
                     ),
 
                     array(
-                        "type"        => "attach_image",
-                        "heading"     => "Afbeelding",
-                        "param_name"  => "image",
+                        "type"        => "attach_images",
+                        "heading"     => "Afbeelding(en)",
+                        "param_name"  => "images",
                         "description" => "Selecteer of upload een afbeelding.",
                         "group"       => "Algemeen",
+                        "admin_label" => true,
                     ),
 
                     array(
                         "type"        => "vc_link",
                         "heading"     => "Knop (optioneel)",
-                        "param_name"  => "button_one",
+                        "param_name"  => "link",
                         "description" => "Kies de knop instellingen.",
                         "group"       => "Algemeen",
-                    ),
-
-                    array(
-                        "type"        => "vc_link",
-                        "heading"     => "Knop (optioneel)",
-                        "param_name"  => "button_two",
-                        "description" => "Kies de knop instellingen.",
-                        "group"       => "Algemeen",
+                        "admin_label" => true,
                     ),
 
                 )
@@ -120,42 +125,69 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Image_With_Content' ) ) {
          */
         public function register_shortcode( $atts, $content = null ) {
 
-            $html = $layout = $media_type = $image = $button_one = $button_two = '';
+            $html = $layout = $title = $images = $link = '';
 
             extract( shortcode_atts( array(
-                'layout'     => '',
-                'image'      => '',
-                'button_one' => '',
-                'button_two' => '',
+                'layout' => '',
+                'title'  => '',
+                'images'  => '',
+                'link'   => '',
             ), $atts ) );
 
             $buttons_html = '';
-            if ( $button_one || $button_two ) {
+            if ( $link ) {
                 $buttons_html .= '<div class="buttons">';
-                if ( $button_one ) {
-                    $button_one = vc_build_link( $button_one );
-                    $buttons_html .= '<a href="' . $button_one['url'] . '" class="btn btn--secondary" target="' . $button_one['target'] . '"><span class="label">' . $button_one['title'] . '</span></a>';
-                }
-                if ( $button_two ) {
-                    $button_two = vc_build_link( $button_two );
-                    $buttons_html .= '<a href="' . $button_two['url'] . '" class="btn btn--outline-white" target="' . $button_two['target'] . '"><span class="label">' . $button_two['title'] . '</span></a>';
+                if ( $link ) {
+                    $link = vc_build_link( $link );
+
+                    $icon_html = '';
+                    if ( str_contains( $link['url'], 'goto' ) ) {
+                        $icon_html = flexx_get_icon( 'arrow-down', '', false );
+                    } else {
+                        $icon_html = flexx_get_icon( 'arrow-right-alt', '', false);
+                    }
+
+                    $buttons_html .= '
+                        <a href="' . $link['url'] . '" class="btn btn--primary" target="' . $link['target'] . '">
+                            <span class="label">' . $link['title'] . '</span>
+                            ' . $icon_html . '
+                        </a>
+                    ';
                 }
                 $buttons_html .= '</div>';
             }
 
+            $images_html = '';
+            $count = 1;
+            $images = explode( ',', $images );
+            foreach ( $images as $img_id ) {
+                if ( $count > 2 ) {
+                    break;
+                }
+                $images_html .= '
+                    <picture class="image-holder" data-inview>
+                        ' . flexx_srcset_image( $img_id, 'flexx-extra-large', false ) . '
+                    </picture>
+                ';
+                $count++;
+            }
+
             $html .= '
-				<div class="media-with-content media-with-content--' . $media_type . ( $layout === 'reverse' ? ' media-with-content--reverse' : '' ) . ' wpb_content_element">
+				<div class="media-with-content' . ( $layout === 'reverse' ? ' media-with-content--reverse' : '' ) . ' wpb_content_element">
+				
+				    ' . ( count($images) > 1 ? '<div class="media-with-content__title" data-inview><h2 class="title">' . $title . '</h2></div>' : '') . '
 					
-					<div class="media-with-content__media">
-						<div class="media-holder" data-reveal>
-							' . flexx_srcset_image($image, 'flexx-large') . '
-						</div>
-					</div>
-					
-					<div class="media-with-content__content" data-reveal>
-						' . wpautop( $content ) . '
-						' . $buttons_html . '
-					</div>
+					<div class="inner-wrapper">
+                        <div class="media-with-content__image' . ( count( $images ) > 1 ? 's' : '' ) . '">
+                            ' . $images_html . '
+                        </div>
+                        
+                        <div class="media-with-content__content" data-inview>
+                        ' . ( count($images) === 1 ? '<h2 class="title">' . $title . '</h2>' : '') . '
+                            ' . wpautop( $content ) . '
+                            ' . $buttons_html . '
+                        </div>
+                    </div>
 					
 				</div>
 			';

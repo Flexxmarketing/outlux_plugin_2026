@@ -57,7 +57,7 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Global_Block' ) ) {
 				"content_element"         => true,
 				"show_settings_on_create" => true,
 				"icon"                    => FLEXX_CP_IMG_URL . "vc-icon.svg",
-				"category"                => "Flexx",
+				"category"                => "Flexxmarketing",
 				"params"                  => array(
 
 					array(

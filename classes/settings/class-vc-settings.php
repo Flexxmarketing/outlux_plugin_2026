@@ -43,6 +43,7 @@ class VC_Settings {
         add_action( 'vc_before_init', array( $this, 'custom_param_types' ) );
         add_action( 'vc_before_init', array( $this, 'disable_frontend_editor' ) );
         add_action( 'vc_before_init', array( $this, 'set_post_type_support' ) );
+        // Element availability is handled per-element via Flexx_VC_Element_Template::editor_visibility_rules().
 
     }
 

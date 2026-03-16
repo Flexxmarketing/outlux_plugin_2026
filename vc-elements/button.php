@@ -60,7 +60,7 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Button_Block' ) ) {
                 "show_settings_on_create" => true,
                 "icon"                    => 'vc_custom_flexx_icon',
                 'admin_enqueue_css'      =>  FLEXX_CP_ASSETS_URL . '/css/vc-element-view.css',
-                "category"                => "Flexx",
+                "category"                => "Flexxmarketing",
                 'admin_enqueue_js'        => FLEXX_CP_ASSETS_URL . '/js/vc-element-view.js',
                 'js_view'                 => 'VcCustomElementView',
                 "params"                  => array(
@@ -71,6 +71,21 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Button_Block' ) ) {
                         "param_name"  => "link",
                         "description" => "Vul hier de link in voor de knop.",
                         "group"       => "Algemeen",
+                        "admin_label" => true,
+                    ),
+
+                    array(
+                        "type"        => "dropdown",
+                        "heading"     => "Stijl",
+                        "param_name"  => "style",
+                        "description" => "Kies de stijl van de knop.",
+                        "group"       => "Algemeen",
+                        "value"       => array(
+                            "Zwarte outline (Standaard)" => "outline",
+                            "Witte outline"              => "outline-white",
+                            "Geel"                       => "primary",
+                        ),
+                        "save_always" => true,
                         "admin_label" => true,
                     ),
 
@@ -107,19 +122,35 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Button_Block' ) ) {
 
         public function register_shortcode( $atts, $content = null ) {
 
-            $link = $alignment = '';
+            $link = $style = $alignment = '';
 
             extract( shortcode_atts( array(
                 'link'      => '',
+                'style'     => '',
                 'alignment' => '',
             ), $atts ) );
 
             $link = vc_build_link( $link );
 
             if ( ! empty( $link['url'] ) ) {
+
+                $icon_html = '';
+                if ( str_contains( $link['url'], 'goto' ) ) {
+                    $icon_html = flexx_get_icon( 'arrow-down', '', false );
+                } else {
+                    $icon_html = flexx_get_icon( 'arrow-right-alt', '', false);
+                }
+
+                if ( empty( $style ) ) {
+                    $style = 'outline';
+                }
+
                 $content = '
-                    <div data-inview class="wpb_content_element" style="text-align: ' . esc_attr( $alignment ) . ';">
-                        <a href="' . esc_url( $link['url'] ) . '" class="btn btn--primary">' . $link['title'] . '</a>
+                    <div data-inview class="flexx_button_element wpb_content_element" style="text-align: ' . $alignment . ';">
+                        <a href="' . esc_url( $link['url'] ) . '" class="btn btn--' . $style . '">
+                            ' . $link['title'] . '
+                            ' . $icon_html . '
+                        </a>
                     </div>
                 ';
             }

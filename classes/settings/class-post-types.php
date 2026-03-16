@@ -77,8 +77,8 @@ class Post_Types {
 			$icon = str_replace('path', 'path fill="#fff"', $icon);
 			$icon = 'data:image/svg+xml;base64,' . base64_encode( $icon );
 		} else {
-			$icon = $settings['icon'];
-		}
+            $icon = $settings['icon'];
+        }
 
 		// Set up labels for post type
 		$labels = array(

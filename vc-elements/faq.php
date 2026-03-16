@@ -46,44 +46,25 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_FAQ' ) ) {
                 "name"                    => "Veelgestelde vragen",
                 "base"                    => $this->shortcode_name(),
                 "class"                   => "flexx-custom-vc-item",
-                "description"             => "Voeg een blok toe met veelgestelde vragen die uitklapbaar zijn.",
+                "description"             => "Toont de veelgestelde vragen vanuit het FAQ overzicht.",
                 "content_element"         => true,
-                "show_settings_on_create" => true,
+                "show_settings_on_create" => false,
                 "icon"                    => 'vc_custom_flexx_icon',
-                "category"                => "Flexx",
+                "category"                => "Flexxmarketing",
                 'admin_enqueue_css'       => FLEXX_CP_ASSETS_URL . '/css/vc-element-view.css',
                 'admin_enqueue_js'        => FLEXX_CP_ASSETS_URL . '/js/vc-element-view.js',
                 'js_view'                 => 'VcCustomElementView',
                 "params"                  => array(
 
                     array(
-                        "type"        => "param_group",
-                        "heading"     => "Veelgestelde vragen",
-                        "param_name"  => "faqs",
-                        "description" => "Voeg hier de veelgestelde vragen toe.",
+                        "type"        => "empty",
+                        "heading"     => "Geen opties",
+                        "param_name"  => "empty",
+                        "description" => "Deze shortcode heeft geen opties.",
                         "group"       => "Algemeen",
-                        "params"      => array(
-
-                            array(
-                                "type"        => "textfield",
-                                "heading"     => "Titel",
-                                "param_name"  => "title",
-                                "description" => "Vul hier de titel in.",
-                                "admin_label" => true,
-                            ),
-
-                            array(
-                                "type"        => "textarea",
-                                "heading"     => "Tekst",
-                                "param_name"  => "text",
-                                "description" => "De tekst van de vraag en het antwoord.",
-                            ),
-
-                        ),
                     ),
 
                 )
-
             ) );
         }
 
@@ -97,13 +78,44 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_FAQ' ) ) {
          */
         public function register_shortcode( $atts, $content = null ) {
 
-            $html = $faqs = $faqs_html = '';
+            $html       = '';
+            $faqs_html  = '';
+            $faqs       = array();
+            $post_type  = 'faq';
 
-            extract( shortcode_atts( array(
-                'faqs'  => '',
-            ), $atts ) );
+            // Gebruik de huidige pagina-query op het FAQ archief, zoals bij stack-terrace-solutions.
+            if ( is_post_type_archive( $post_type ) && have_posts() ) {
+                while ( have_posts() ) {
+                    the_post();
 
-            $faqs  = vc_param_group_parse_atts( $faqs );
+                    $faqs[] = array(
+                        'title' => get_the_title(),
+                        'text'  => get_the_content(),
+                    );
+                }
+            } else {
+                // Fallback: losse query voor alle FAQ's (bijv. als shortcode elders gebruikt zou worden).
+                $query = new \WP_Query( array(
+                    'post_type'      => $post_type,
+                    'posts_per_page' => -1,
+                    'post_status'    => 'publish',
+                    'orderby'        => 'menu_order',
+                    'order'          => 'ASC',
+                ) );
+
+                if ( $query->have_posts() ) {
+                    while ( $query->have_posts() ) {
+                        $query->the_post();
+
+                        $faqs[] = array(
+                            'title' => get_the_title(),
+                            'text'  => get_the_content(),
+                        );
+                    }
+
+                    wp_reset_postdata();
+                }
+            }
 
             $faq_count = count( $faqs );
             $half = ceil( $faq_count / 2 );
@@ -118,7 +130,7 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_FAQ' ) ) {
                         <div class="loop-faq-item" data-inview>
                             <div class="loop-faq-item__summary" data-cursor-icon="plus">
                                 <h3 class="title">' . $faq['title'] . '</h3>
-                                ' . flexx_get_icon( 'chevron-down', '', false ) . '
+                                ' . flexx_get_icon( 'plus', '', false ) . '
                             </div>
                             <div class="loop-faq-item__content" style="display: none;">
                                 ' . wpautop( $faq['text'] ) . '
