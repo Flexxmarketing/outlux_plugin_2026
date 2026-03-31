@@ -196,7 +196,7 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Process_Steps' ) ) {
                                 ' . $steps_html . '
                             </div>
                         </div>
-                        <div class="steps-slider-pagination" data-inview></div>
+                        <div class="steps-slider-pagination" style="--slides:' . ($counter - 2) . ';" data-inview></div>
                     </div>
                     
                     ' . $button_html . '

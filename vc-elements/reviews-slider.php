@@ -93,7 +93,7 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Reviews_Slider' ) ) {
             // Fetch posts
             $args = array(
                 'post_type'      => 'google_review',
-                'posts_per_page' => 6,
+                'posts_per_page' => -1,
                 'orderby'        => 'date',
                 'order'          => 'DESC',
                 'skip_empty_content' => true,
@@ -110,6 +110,7 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Reviews_Slider' ) ) {
 
             $review_html = '';
             $review = new WP_Query( $args );
+            $review_count = $review->found_posts;
 
             if ( $review->have_posts() ) {
 
@@ -153,7 +154,7 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Reviews_Slider' ) ) {
                                 ' . $review_html . '
                             </div>
                         </div>
-                        <div class="google-reviews-slider-pagination" data-inview></div>
+                        <div class="google-reviews-slider-pagination" style="--slides:' . ($review_count - 1) . ';" data-inview></div>
                     </div>
                     
                 </div>

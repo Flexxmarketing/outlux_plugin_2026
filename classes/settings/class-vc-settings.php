@@ -487,9 +487,11 @@ class VC_Settings {
 
     public static function get_global_blocks() {
 
+        if ( ! is_admin() ) return;
+
         $args = array(
             'post_type'      => 'global_blocks',
-            'posts_per_page' => - 1,
+            'posts_per_page' => -1,
             'orderby'        => 'title',
         );
 
