@@ -114,7 +114,7 @@ if ( ! class_exists( __NAMESPACE__ . '\Flexx_VC_Experience_Gallery' ) ) {
             $count = 0;
             foreach ( $images as $image ) {
                 $images_html .= '
-                    <div class="image-wrapper parallax-img" data-parallax-speed="' . ( 35 + rand(15, 50) ) . '">
+                    <div class="image-wrapper parallax-img" data-parallax-speed="' . ( 15 + rand(15, 50) ) . '">
                         <picture class="image-holder" data-inview>
                             ' . flexx_srcset_image( $image, 'flexx-ultra-large', false ) . '
                         </picture>
